@@ -1,3 +1,4 @@
+// by zx: 使用了es6的import语法
 import Util from './util'
 
 
@@ -8,6 +9,16 @@ import Util from './util'
  * --------------------------------------------------------------------------
  */
 
+/* by zx:
+使用了es6的箭头函数，const局部作用域变量定义
+Alert整体的定义形式如下：
+const Alert = (($) => {...})(jQuery)
+
+($) => {...}等价于:
+function($) {
+...
+}
+*/
 const Alert = (($) => {
 
 
@@ -56,7 +67,7 @@ const Alert = (($) => {
 
 
     // getters
-
+    // by zx: static get是什么语法？
     static get VERSION() {
       return VERSION
     }
@@ -190,4 +201,5 @@ const Alert = (($) => {
 
 })(jQuery)
 
+// by zx: 使用了es6 export语法导出变量Alert
 export default Alert
