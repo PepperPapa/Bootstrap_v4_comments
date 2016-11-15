@@ -1,4 +1,6 @@
-// by zx: 使用了es6的import语法
+/* by zx: 
+使用了es6的import语法
+*/
 import Util from './util'
 
 

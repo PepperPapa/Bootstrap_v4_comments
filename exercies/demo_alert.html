@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>alert exercise</title>
+    <link href="../dist/css/bootstrap.css" rel="stylesheet"/>
+  </head>
+  <body>
+    <div class="container-fluid" role="alert">
+      <h1>alert.js练习</h1>
+      <div class="alert alert-success" >
+	<!-- 加载jquery库, util.js和alert.js的情况下（或者直接加载bootstrap.js）
+	     data-dismiss="alert" 包含该属性就可以执行关闭动作 -->
+	<button type="button" class="close" data-dismiss="alert">
+	  <span>&times;</span>
+	</button>
+	<strong>good!</strong> 可关闭alert提示框
+      </div>
+    </div>
+
+    <script src="../jquery-3.1.1.js" ></script>
+    <script src="../js/dist/util.js" ></script>
+    <script src="../js/dist/alert.js" ></script>
+  </body>
+</html>
