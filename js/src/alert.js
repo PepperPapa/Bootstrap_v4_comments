@@ -43,9 +43,12 @@ const Alert = (($) => {
   }
 
   const Event = {
+    // by zx: close.bs.alert
     CLOSE          : `close${EVENT_KEY}`,
+    // by zx: closed.bs.alert
     CLOSED         : `closed${EVENT_KEY}`,
-    CLICK_DATA_API : `click${EVENT_KEY}${DATA_API_KEY}`
+    // by zx: click.bs.alert.data-api
+    CLICK_DATA_API : `click${EVENT_KEY}${DATA_API_KEY}`   
   }
 
   const ClassName = {
@@ -78,8 +81,12 @@ const Alert = (($) => {
     // public
 
     close(element) {
+      /* by zx:
+       * 关闭alert提示框方法
+       */
       element = element || this._element
 
+      // by zx: 从data-miss="alert"的元素开始找到alert提示框的根元素
       let rootElement = this._getRootElement(element)
       let customEvent = this._triggerCloseEvent(rootElement)
 
@@ -179,6 +186,11 @@ const Alert = (($) => {
    * ------------------------------------------------------------------------
    */
 
+  /* by zx:
+   * Event.CLICK_DATA_API: 监听click事件，".bs.alert.data-api"应该是表示命名空间，TODO: 待进一步更新
+   * Selector.DISMISS: 表示属性data-miss="alert"的元素响应click事件
+   * Alert._handleDismiss为响应处理函数
+   */
   $(document).on(
     Event.CLICK_DATA_API,
     Selector.DISMISS,
@@ -192,6 +204,11 @@ const Alert = (($) => {
    * ------------------------------------------------------------------------
    */
 
+  /* by zx:
+   * NAME: "alert"
+   * jQuery.fn == jQuery.prototype返回true，也就是jQuery的原型就是jQuery.fn,目的是为了实现方法的共享
+   * jQuery.fn["alert"]就等同于jQuery.prototype.alert,因此jQuery对象就具有了alert方法，如$(".alert").alert("close")
+   */
   $.fn[NAME]             = Alert._jQueryInterface
   $.fn[NAME].Constructor = Alert
   $.fn[NAME].noConflict  = function () {
