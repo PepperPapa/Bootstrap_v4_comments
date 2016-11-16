@@ -14,14 +14,31 @@ bootstrap/
 ```
 
 ## * jQuery FAQ
-1. $ == jQuery, jQuery表示的是什么哪？
+1. ($ == jQuery)jQuery表示的是什么哪？
+jQuery本身就是一个函数，该函数的作用是选择DOM元素，因此jQuery的核心思想就是匹配
+元素并对其进行操作。
 
 2. $.fn == $.prototype, 为什么要有fn？
-prototype表示原型，拼写过长，jQuery的插件扩展都是基于原型的，
-而且属于高级特性，对用户应该隐藏。增加fn方法主要是拼写方便，对用户隐藏了原型拼写，
+prototype表示原型，拼写过长，jQuery的插件扩展都是基于原型的，因为原型上的方法
+及数据对于所有的对应实例都是共享的，而且属于高级特性，对用户应该隐藏。增加fn方法
+主要是拼写方便，对用户隐藏了原型拼写，
 扩展方法直接使用如下类似的代码：
 ```
 $.fn.xx = function(){}
 ```
 
 3. $.fn.init又是做什么用途的？
+jQuery本身就是一个函数，调用jQuery函数返回的是jQuery对象，jQuery对象实际上就是
+$.fn.init这个构造函数的实例（new操作符），
+接着可能还会有疑问为什么不返回jQuery的实例哪？ 
+答：如果直接返回jQuery的实例会出现循环调用而出现死循环，因此必须借用别的构
+造函数来返回实例。
+那为什么是$.fn.init这个构造函数哪？ 
+答：$和jQuery是仅有的暴露给全局环境的变量，直接从jQuery中引出构造函数会减少不必要
+的变量暴露，另外$.fn实际就是jQuery的原型对象，因此直接增加一个init构造函数来表示
+jQuery对象的构造函数非常合适。
+
+4. $.fn.init.prototype == $.prototype为什么？
+调用jQuery方法返回的实际上是$.fn.init构造函数的实例对象，将jQuery的原型即
+jQuery.prototype赋值给$.fn.init.prototype，这样就可以将jQuery的原型方法
+和jQuery对象共享，jQuery对象（$.fn.init的实例）就可以访问jQuery原型的所有方法了。
