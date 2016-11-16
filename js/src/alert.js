@@ -1,3 +1,11 @@
+/*
+ * 理解源代码的思路：
+ * 1.首先使用简单的示例，能够做到关闭alert提示框
+ * 2.整体浏览源代码的结构，做到有个大致的印象，有没有导入其他的模块
+ * 3.找到关键的入口，如找到相应click事件的代码，一步步牵出各个子函数的意图
+ * 4.以上过程着重理解业务处理流程，不要在语法层面纠缠不清，等彻底明白了整个处理流程后再详细消化不熟悉的语法
+ */
+
 /* by zx: 
 使用了es6的import语法
 */
@@ -187,6 +195,8 @@ const Alert = (($) => {
    */
 
   /* by zx:
+   * 监听click事件并处理关闭动作，包含data-miss="alert"属性不需要额外编写js代码既可以实现关闭alert提示框
+   * 
    * Event.CLICK_DATA_API: 监听click事件，".bs.alert.data-api"应该是表示命名空间，TODO: 待进一步更新
    * Selector.DISMISS: 表示属性data-miss="alert"的元素响应click事件
    * Alert._handleDismiss为响应处理函数
