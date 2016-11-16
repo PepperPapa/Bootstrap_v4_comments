@@ -20,9 +20,9 @@ jQuery本身就是一个函数，该函数的作用是选择DOM元素，因此jQ
 
 2. $.fn == $.prototype, 为什么要有fn？
 prototype表示原型，拼写过长，jQuery的插件扩展都是基于原型的，因为原型上的方法
-及数据对于所有的对应实例都是共享的，而且属于高级特性，对用户应该隐藏。增加fn方法
-主要是拼写方便，对用户隐藏了原型拼写，
-扩展方法直接使用如下类似的代码：
+及数据对于所有的对应实例都是共享的，而且处于封装性的考虑，原型拼写对用户应该隐藏，应
+提供更友好的接口。增加fn方法主要是拼写方便，对用户隐藏了原型拼写，扩展方法直接使用
+如下类似的代码：
 ```
 $.fn.xx = function(){}
 ```
@@ -42,3 +42,12 @@ jQuery对象的构造函数非常合适。
 调用jQuery方法返回的实际上是$.fn.init构造函数的实例对象，将jQuery的原型即
 jQuery.prototype赋值给$.fn.init.prototype，这样就可以将jQuery的原型方法
 和jQuery对象共享，jQuery对象（$.fn.init的实例）就可以访问jQuery原型的所有方法了。
+
+5. 为什么$可以直接调用原型的方法，比如$.each方法，不应该是实例才能调用原型的方法吗？
+以each方法为例，该方法继续jQuery.extend方法进行扩展，因此jQuery.each实际上属于
+jQuery函数对象的方法，因此可以直接调用；另外jQuery源码中有如下语句：
+```
+jQuery.extend = jQuery.fn.extend = function() {}
+```
+可见jQuery的原型扩展方法和jQuery本身扩展方法都指向同一个函数，$.fn.extend用于扩展
+原型属性和方法，$.extend用于本身属性和方法的扩展。
