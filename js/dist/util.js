@@ -115,7 +115,7 @@ var Util = function ($) {
         selector = element.getAttribute('href') || '';
         selector = /^#[a-z]/i.test(selector) ? selector : null;
       }
-
+      
       return selector;
     },
     reflow: function reflow(element) {

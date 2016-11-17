@@ -8,7 +8,8 @@
   <body>
     <div class="container-fluid" role="alert">
       <h1>alert.js练习</h1>
-      <div class="alert alert-success" >
+      <!-- fade会导致dom元素不显示 需要增加in默认才会正常显示 -->
+      <div class="alert alert-success fade in" >
 	<!-- 加载jquery库, util.js和alert.js的情况下（或者直接加载bootstrap.js）
 	     data-dismiss="alert" 包含该属性就可以执行关闭动作 -->
 	<button type="button" class="close" data-dismiss="alert">
