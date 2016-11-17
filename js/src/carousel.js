@@ -8,6 +8,14 @@ import Util from './util'
  * --------------------------------------------------------------------------
  */
 
+/* by zx:
+ * Bootstrap模块变量的基本结构(适用于所有Bootstrap js模块)
+ * 1. 定义常量：包括版本信息、事件、选择器、默认配置、类名等
+ * 2. 定义同名类，如Carousel类，该类定义了共有方法和私有方法
+ * 3. 需要监听的DOM的元素起动事件监听并制定响应处理接口为2中的类的响应接口方法
+ * 4. 扩展原型方法至jQuery原型对象，一般为$.fn.xxx，xxx-一般为模块名称，如carousel
+ */
+
 const Carousel = (($) => {
 
 
@@ -20,6 +28,7 @@ const Carousel = (($) => {
   const NAME                = 'carousel'
   const VERSION             = '4.0.0-alpha.5'
   const DATA_KEY            = 'bs.carousel'
+  // TODO: `${}`这个是什么语法，ES6才有吗？
   const EVENT_KEY           = `.${DATA_KEY}`
   const DATA_API_KEY        = '.data-api'
   const JQUERY_NO_CONFLICT  = $.fn[NAME]
@@ -49,13 +58,13 @@ const Carousel = (($) => {
   }
 
   const Event = {
-    SLIDE          : `slide${EVENT_KEY}`,
-    SLID           : `slid${EVENT_KEY}`,
-    KEYDOWN        : `keydown${EVENT_KEY}`,
-    MOUSEENTER     : `mouseenter${EVENT_KEY}`,
+    SLIDE          : `slide${EVENT_KEY}`,  // slide.bs.carousel
+    SLID           : `slid${EVENT_KEY}`,   // slid.bs.carousel
+    KEYDOWN        : `keydown${EVENT_KEY}`, 
+    MOUSEENTER     : `mouseenter${EVENT_KEY}`, 
     MOUSELEAVE     : `mouseleave${EVENT_KEY}`,
-    LOAD_DATA_API  : `load${EVENT_KEY}${DATA_API_KEY}`,
-    CLICK_DATA_API : `click${EVENT_KEY}${DATA_API_KEY}`
+    LOAD_DATA_API  : `load${EVENT_KEY}${DATA_API_KEY}`, // load.bs.carousel.data-api
+    CLICK_DATA_API : `click${EVENT_KEY}${DATA_API_KEY}` //click.bs.carousel.data-api
   }
 
   const ClassName = {
@@ -387,21 +396,26 @@ const Carousel = (($) => {
     // static
 
     static _jQueryInterface(config) {
+      // 由于是jquery对象调用该方法，this为jquery对象，可能是多个对象
       return this.each(function () {
+        // 这里的this表示dom元素
         let data      = $(this).data(DATA_KEY)
         let _config = $.extend({}, Default, $(this).data())
 
+        // 参数为object表示要修改配置，如参数{ interval: 2000 }
         if (typeof config === 'object') {
           $.extend(_config, config)
         }
 
         let action = typeof config === 'string' ? config : _config.slide
 
+        // data为null就重新设置dom元素的data-bs.carousel属性的值
         if (!data) {
           data = new Carousel(this, _config)
           $(this).data(DATA_KEY, data)
         }
 
+        // config为数字表示要跳转的slide序号       
         if (typeof config === 'number') {
           data.to(config)
         } else if (typeof action === 'string') {
@@ -454,9 +468,19 @@ const Carousel = (($) => {
    * ------------------------------------------------------------------------
    */
 
+  /* by zx:
+   * --- 监听事件实现click响应 用户无需额外添加js代码了 ---
+   * 监听事件：click.bs.carousel   所有的事件都有一个bs的命名空间，这个表示Bootstrap，晕了很久
+   * 响应dom元素：包含属性data-slide和data-slide-to的元素
+   */
   $(document)
     .on(Event.CLICK_DATA_API, Selector.DATA_SLIDE, Carousel._dataApiClickHandler)
 
+  /* by zx:
+   * --- 监听事件实现循环轮播 用户无需额外添加js代码了 ---
+   * 监听事件：load.bs.carousel.data-api
+   * 需要执行轮播的dom元素：data-ride="carousel"的元素
+   */
   $(window).on(Event.LOAD_DATA_API, () => {
     $(Selector.DATA_RIDE).each(function () {
       let $carousel = $(this)
@@ -471,6 +495,10 @@ const Carousel = (($) => {
    * ------------------------------------------------------------------------
    */
 
+  /* by zx:
+   * --- jQuery插件扩展：原型扩展，jQuery对象可调用 ---
+   * 扩展了原型方法：$.fn.carousel
+   */
   $.fn[NAME]             = Carousel._jQueryInterface
   $.fn[NAME].Constructor = Carousel
   $.fn[NAME].noConflict  = function () {
