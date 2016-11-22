@@ -239,19 +239,25 @@ const Carousel = (($) => {
 
 
     // private
-
+    // 读取配置，实例化对象是调用
     _getConfig(config) {
       config = $.extend({}, Default, config)
+      // 配置参数类型检查
       Util.typeCheckConfig(NAME, config, DefaultType)
       return config
     }
 
+    // 配置监听事件 DOM2级方法
     _addEventListeners() {
+      // 按键处理函数，$.proxy将this._keydown函数的调用对象指向this，即当前jQuery对象
       if (this._config.keyboard) {
         $(this._element)
           .on(Event.KEYDOWN, $.proxy(this._keydown, this))
       }
 
+      // 'ontouchstart'事件为移动设备，点击触摸屏触发，这里取非表示不支持ontouchstart事件
+      // 'MOUSEENTER': mouseenter.bs.carousel  该事件触发暂停播放slide
+      // 'MOUSELEAVE': mouseleave.bs.carousel  该事件触发循环播放slide
       if (this._config.pause === 'hover' &&
         !('ontouchstart' in document.documentElement)) {
         $(this._element)
@@ -260,9 +266,12 @@ const Carousel = (($) => {
       }
     }
 
+    // keydown.bs.carousel事件处理函数
     _keydown(event) {
+      // 阻止默认行为
       event.preventDefault()
 
+      // input或textarea元素的按键事件直接返回，不处理
       if (/input|textarea/i.test(event.target.tagName)) {
         return
       }
@@ -279,11 +288,14 @@ const Carousel = (($) => {
       }
     }
 
+    // 获取slide元素的index序号
     _getItemIndex(element) {
+      // Selector.ITM: ".carousel-item"
       this._items = $.makeArray($(element).parent().find(Selector.ITEM))
       return this._items.indexOf(element)
     }
 
+    // 根据方向参数"nex","prev"获取当前active slide元素的下一个元素
     _getItemByDirection(direction, activeElement) {
       let isNextDirection = direction === Direction.NEXT
       let isPrevDirection = direction === Direction.PREVIOUS
@@ -303,20 +315,26 @@ const Carousel = (($) => {
         this._items[this._items.length - 1] : this._items[itemIndex]
     }
 
-
+    // 触发slide.bs.carousel事件，_slide方法调用即立刻触发
     _triggerSlideEvent(relatedTarget, directionalClassname) {
+      // 自定义slide.bs.carousel事件
       let slideEvent = $.Event(Event.SLIDE, {
         relatedTarget,
         direction: directionalClassname
       })
 
+      // 触发事件
       $(this._element).trigger(slideEvent)
 
       return slideEvent
     }
 
+    // 设置element为当前active的indicator
     _setActiveIndicatorElement(element) {
+      // this._indicatorsElement表示class为"carousel-indicators"的元素
       if (this._indicatorsElement) {
+        // Selector.ACTIVE: ".active"
+        // ClassName.ACTIVE: "active"
         $(this._indicatorsElement)
           .find(Selector.ACTIVE)
           .removeClass(ClassName.ACTIVE)
@@ -325,29 +343,40 @@ const Carousel = (($) => {
           this._getItemIndex(element)
         ]
 
+        // 设置Element为当前acticve的indicator元素
         if (nextIndicator) {
           $(nextIndicator).addClass(ClassName.ACTIVE)
         }
       }
     }
 
+    // 播放slide函数，
+    // direction表示slide的方向，影响动画的方向
+    // Element为目标slide元素
     _slide(direction, element) {
+      // this._element表示class为"carousel"的元素， Selector.ACTIVE_ITEM: ".active.carousel-item"
       let activeElement = $(this._element).find(Selector.ACTIVE_ITEM)[0]
+      // TODO: zx || 后面的语句“activeElement && this._getItemByDirection(direction, activeElement)”如何理解？
       let nextElement   = element || activeElement &&
         this._getItemByDirection(direction, activeElement)
 
+      // 转换为布尔值
       let isCycling = Boolean(this._interval)
 
+      // 获取slide的方向
       let directionalClassName = direction === Direction.NEXT ?
         ClassName.LEFT :
         ClassName.RIGHT
 
+      // 如果nextElement非null且包含active类名，表示已完成slide动作，动画中状态置为false
       if (nextElement && $(nextElement).hasClass(ClassName.ACTIVE)) {
         this._isSliding = false
         return
       }
 
+      // 监听slide.bs.carousel事件，slideEvent为jQuery对象
       let slideEvent = this._triggerSlideEvent(nextElement, directionalClassName)
+      // jQuery对象方法isDefaultPrevented返回是否调用了preventDefault()方法
       if (slideEvent.isDefaultPrevented()) {
         return
       }
@@ -359,17 +388,20 @@ const Carousel = (($) => {
 
       this._isSliding = true
 
+      // 如果当前为循环播放，调用_slide会暂停循环播放
       if (isCycling) {
         this.pause()
       }
 
       this._setActiveIndicatorElement(nextElement)
 
+      // slid.bs.carousel事件，slide结束后触发
       let slidEvent = $.Event(Event.SLID, {
         relatedTarget: nextElement,
         direction: directionalClassName
       })
 
+      // 如果支持过渡特性，且包含"slide"类
       if (Util.supportsTransitionEnd() &&
         $(this._element).hasClass(ClassName.SLIDE)) {
 
@@ -380,34 +412,39 @@ const Carousel = (($) => {
         $(activeElement).addClass(directionalClassName)
         $(nextElement).addClass(directionalClassName)
 
+        // 过渡动画，仅触发一次
         $(activeElement)
           .one(Util.TRANSITION_END, () => {
             $(nextElement)
               .removeClass(directionalClassName)
               .removeClass(direction)
 
+            // 下一个slide添加active类
             $(nextElement).addClass(ClassName.ACTIVE)
 
+            // 当前slide去除active、direction、directionalClassName(布尔值)
             $(activeElement)
               .removeClass(ClassName.ACTIVE)
               .removeClass(direction)
               .removeClass(directionalClassName)
 
-            this._isSliding = false
-
+            this._isSliding = false // 清除动画中标识
+            // 触发slid.bs.carousel事件
+            // TODO: zx 为什么使用setTimeout而不是直接触发事件？
             setTimeout(() => $(this._element).trigger(slidEvent), 0)
 
           })
-          .emulateTransitionEnd(TRANSITION_DURATION)
+          .emulateTransitionEnd(TRANSITION_DURATION)  // 600ms过渡时间
 
-      } else {
-        $(activeElement).removeClass(ClassName.ACTIVE)
-        $(nextElement).addClass(ClassName.ACTIVE)
+      } else { // 不支持过渡特性
+        $(activeElement).removeClass(ClassName.ACTIVE) // 当前slide去除active
+        $(nextElement).addClass(ClassName.ACTIVE) // 下一个slide增加active
 
-        this._isSliding = false
-        $(this._element).trigger(slidEvent)
+        this._isSliding = false // 清除动画状态标识
+        $(this._element).trigger(slidEvent)  // 触发slid.bs.carousel事件
       }
 
+      // 重新恢复循环播放
       if (isCycling) {
         this.cycle()
       }
@@ -452,6 +489,7 @@ const Carousel = (($) => {
     }
 
     static _dataApiClickHandler(event) {
+      // 通过data-taget属性查找target元素，返回data-target指向的元素
       let selector = Util.getSelectorFromElement(this)
 
       if (!selector) {
@@ -465,15 +503,19 @@ const Carousel = (($) => {
       }
 
       let config     = $.extend({}, $(target).data(), $(this).data())
+      // 这里this指的是点击的DOM元素，为carousel-indicators的子元素
       let slideIndex = this.getAttribute('data-slide-to')
 
       if (slideIndex) {
         config.interval = false
       }
 
+      // 调用该方法会Carousel对象实例写入target元素的data-bs.carousel属性
       Carousel._jQueryInterface.call($(target), config)
 
       if (slideIndex) {
+        // $(target).data(DATA_KEY)实际为Carousel对象，因此具有to方法
+        // DATA_KEY: "bs.carousel"
         $(target).data(DATA_KEY).to(slideIndex)
       }
 
