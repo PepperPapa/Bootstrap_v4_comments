@@ -60,8 +60,8 @@ const Carousel = (($) => {
   const Event = {
     SLIDE          : `slide${EVENT_KEY}`,  // slide.bs.carousel
     SLID           : `slid${EVENT_KEY}`,   // slid.bs.carousel
-    KEYDOWN        : `keydown${EVENT_KEY}`, 
-    MOUSEENTER     : `mouseenter${EVENT_KEY}`, 
+    KEYDOWN        : `keydown${EVENT_KEY}`,
+    MOUSEENTER     : `mouseenter${EVENT_KEY}`,
     MOUSELEAVE     : `mouseleave${EVENT_KEY}`,
     LOAD_DATA_API  : `load${EVENT_KEY}${DATA_API_KEY}`, // load.bs.carousel.data-api
     CLICK_DATA_API : `click${EVENT_KEY}${DATA_API_KEY}` //click.bs.carousel.data-api
@@ -117,14 +117,16 @@ const Carousel = (($) => {
       return VERSION
     }
 
+    // 默认配置
     static get Default() {
       return Default
     }
 
 
     // public
-
+    // 播放下一个slide
     next() {
+      // 内部变量_isSliding表示是否处于动画状态
       if (!this._isSliding) {
         this._slide(Direction.NEXT)
       }
@@ -415,7 +417,7 @@ const Carousel = (($) => {
           $(this).data(DATA_KEY, data)
         }
 
-        // config为数字表示要跳转的slide序号       
+        // config为数字表示要跳转的slide序号
         if (typeof config === 'number') {
           data.to(config)
         } else if (typeof action === 'string') {
