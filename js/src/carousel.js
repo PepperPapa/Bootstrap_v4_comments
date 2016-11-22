@@ -128,6 +128,7 @@ const Carousel = (($) => {
     next() {
       // 内部变量_isSliding表示是否处于动画状态
       if (!this._isSliding) {
+        // Direction.Next: "next"
         this._slide(Direction.NEXT)
       }
     }
@@ -139,27 +140,35 @@ const Carousel = (($) => {
       }
     }
 
+    // 播放上一个slide
     prev() {
       if (!this._isSliding) {
+        // Direction.PREVIOUS: "prev"
         this._slide(Direction.PREVIOUS)
       }
     }
 
+    // 暂停播放slide，event为事件对象，动态生成
     pause(event) {
+      // _isPaused表示当前是否处于暂停播放slide的状态
+      // event为null应该是表示人为调用的情况，非事件触发
       if (!event) {
         this._isPaused = true
       }
 
+      // Selector.NEXT_PREV: ".next, .prev"
       if ($(this._element).find(Selector.NEXT_PREV)[0] &&
         Util.supportsTransitionEnd()) {
         Util.triggerTransitionEnd(this._element)
         this.cycle(true)
       }
 
+      // 清除超时设定，即暂停动画
       clearInterval(this._interval)
       this._interval = null
     }
 
+    // 启动循环播放slide
     cycle(event) {
       if (!event) {
         this._isPaused = false
@@ -170,23 +179,30 @@ const Carousel = (($) => {
         this._interval = null
       }
 
+      // 启动超时设定，即启动循环播放
       if (this._config.interval && !this._isPaused) {
+        // $.proxy为jQuery函数对象方法，作用类似与bind指定方法的调用对象固定为carousel对象
         this._interval = setInterval(
           $.proxy(document.visibilityState ? this.nextWhenVisible : this.next, this), this._config.interval
         )
       }
     }
 
+    // 跳转至序号为index的slide
     to(index) {
+      // Selector.ACTIVE_ITEM: "active.carousel-item"
       this._activeElement = $(this._element).find(Selector.ACTIVE_ITEM)[0]
 
       let activeIndex = this._getItemIndex(this._activeElement)
 
+      // 非法参数直接返回
       if (index > (this._items.length - 1) || index < 0) {
         return
       }
 
+      // 正在动画中
       if (this._isSliding) {
+        // 绑定slid.bs.carousel事件处理函数（slide动画过渡结束后触发），.one方法表示仅触发一次
         $(this._element).one(Event.SLID, () => this.to(index))
         return
       }
@@ -205,9 +221,12 @@ const Carousel = (($) => {
     }
 
     dispose() {
+      // 取消事件监听EVENT_KEY: ".bs.carousel"
       $(this._element).off(EVENT_KEY)
+      // 移除元素的data-bs.carousel属性
       $.removeData(this._element, DATA_KEY)
 
+      // 初始化内部变量
       this._items             = null
       this._config            = null
       this._element           = null
