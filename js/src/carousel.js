@@ -317,7 +317,7 @@ const Carousel = (($) => {
 
     // 触发slide.bs.carousel事件，_slide方法调用即立刻触发
     _triggerSlideEvent(relatedTarget, directionalClassname) {
-      // 自定义slide.bs.carousel事件
+      // 创建自定义slide.bs.carousel事件
       let slideEvent = $.Event(Event.SLIDE, {
         relatedTarget,
         direction: directionalClassname
@@ -434,7 +434,8 @@ const Carousel = (($) => {
             setTimeout(() => $(this._element).trigger(slidEvent), 0)
 
           })
-          .emulateTransitionEnd(TRANSITION_DURATION)  // 600ms过渡时间
+          // emulateTransitionEnd在Util.js插件中定义 600ms过渡时间
+          .emulateTransitionEnd(TRANSITION_DURATION)
 
       } else { // 不支持过渡特性
         $(activeElement).removeClass(ClassName.ACTIVE) // 当前slide去除active
