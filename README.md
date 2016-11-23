@@ -51,3 +51,9 @@ jQuery.extend = jQuery.fn.extend = function() {}
 ```
 可见jQuery的原型扩展方法和jQuery本身扩展方法都指向同一个函数，$.fn.extend用于扩展
 原型属性和方法，$.extend用于本身属性和方法的扩展。
+
+## * alert组件demo
+
+## * carsouel轮播组件demo
+
+## * scrollspy滚动监听组件demo
