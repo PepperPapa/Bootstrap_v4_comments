@@ -22,6 +22,7 @@ const ScrollSpy = (($) => {
   const DATA_KEY           = 'bs.scrollspy'
   const EVENT_KEY          = `.${DATA_KEY}`
   const DATA_API_KEY       = '.data-api'
+  // 此时$.fn[scrollspy]还未定义，因此为undefined
   const JQUERY_NO_CONFLICT = $.fn[NAME]
 
   const Default = {
@@ -30,16 +31,18 @@ const ScrollSpy = (($) => {
     target : ''
   }
 
+  // 分别对应Default对象属性的类型，用于类型检查
   const DefaultType = {
     offset : 'number',
     method : 'string',
     target : '(string|element)'
   }
 
+  // .bs.scrollspy表示命名空间，避免冲突
   const Event = {
-    ACTIVATE      : `activate${EVENT_KEY}`,
-    SCROLL        : `scroll${EVENT_KEY}`,
-    LOAD_DATA_API : `load${EVENT_KEY}${DATA_API_KEY}`
+    ACTIVATE      : `activate${EVENT_KEY}`,  //activate.bs.scrollspy
+    SCROLL        : `scroll${EVENT_KEY}`,  // scroll.bs.scrollspy
+    LOAD_DATA_API : `load${EVENT_KEY}${DATA_API_KEY}`  //load.bs.scrollspy.data-api
   }
 
   const ClassName = {
@@ -76,10 +79,13 @@ const ScrollSpy = (($) => {
 
   class ScrollSpy {
 
+    // new操作是自动调用
     constructor(element, config) {
       this._element       = element
       this._scrollElement = element.tagName === 'BODY' ? window : element
       this._config        = this._getConfig(config)
+      // css元素选择符 ".nav-link, .dropdown-item"
+      // TODO: zx this._config.target指的什么？
       this._selector      = `${this._config.target} ${Selector.NAV_LINKS},`
                           + `${this._config.target} ${Selector.DROPDOWN_ITEMS}`
       this._offsets       = []
@@ -87,6 +93,7 @@ const ScrollSpy = (($) => {
       this._activeTarget  = null
       this._scrollHeight  = 0
 
+      // 起动监听scroll.bs.scrollspy，this._process为事件处理程序, $.proxy用于指定上下文语境
       $(this._scrollElement).on(Event.SCROLL, $.proxy(this._process, this))
 
       this.refresh()
@@ -108,6 +115,7 @@ const ScrollSpy = (($) => {
     // public
 
     refresh() {
+      // 滚动监听对象不为window则autoMethod=position，否则为offset
       let autoMethod = this._scrollElement !== this._scrollElement.window ?
         OffsetMethod.POSITION : OffsetMethod.OFFSET
 
@@ -122,6 +130,7 @@ const ScrollSpy = (($) => {
 
       this._scrollHeight = this._getScrollHeight()
 
+      // 选取".nav-link, .dropdown-item"DOM元素数组
       let targets = $.makeArray($(this._selector))
 
       targets
@@ -265,7 +274,7 @@ const ScrollSpy = (($) => {
     }
 
 
-    // static
+    // static  静态方法为构造函数对象方法，非原型方法
 
     static _jQueryInterface(config) {
       return this.each(function () {
@@ -295,12 +304,16 @@ const ScrollSpy = (($) => {
    * Data Api implementation
    * ------------------------------------------------------------------------
    */
-
+  /*
+   * 监听事件load.bs.scrollspy.data-api
+   */
   $(window).on(Event.LOAD_DATA_API, () => {
+    // 选择包含属性data-spy="scroll"的DOM元素
     let scrollSpys = $.makeArray($(Selector.DATA_SPY))
 
     for (let i = scrollSpys.length; i--;) {
       let $spy = $(scrollSpys[i])
+      // $spy.data()：DOM元素的所有data属性组成的object对象，作为config参数
       ScrollSpy._jQueryInterface.call($spy, $spy.data())
     }
   })
@@ -311,7 +324,7 @@ const ScrollSpy = (($) => {
    * jQuery
    * ------------------------------------------------------------------------
    */
-
+  // NAME: scrollspy
   $.fn[NAME]             = ScrollSpy._jQueryInterface
   $.fn[NAME].Constructor = ScrollSpy
   $.fn[NAME].noConflict  = function () {
