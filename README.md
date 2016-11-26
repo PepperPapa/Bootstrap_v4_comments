@@ -57,3 +57,13 @@ jQuery.extend = jQuery.fn.extend = function() {}
 ## * carsouel轮播组件demo
 
 ## * scrollspy滚动监听组件demo
+
+## * SCSS预处理器主要功能
+1. 变量：以$符号定义变量。
+2. 嵌套：注意过多层次嵌套不是最佳实践。
+3. 子文件：以_开头的scss文件被认为是scss的子文件，需要由另外的文件使用@import命令导入，不会转化为css文件。
+4. @import: 传统的css使用@import命令会导致额外的http请求，scss预处理器会事先整个文件而不会产生额外的http请求。
+5. mixin: @maxin命令创建mixin，使用@include调用定义的mixin。
+6. 扩展和继承：使用@extend命令继承共享的样式。
+7. 操作符：使用+ - * / %等运算法进行基本的数学运算
+
