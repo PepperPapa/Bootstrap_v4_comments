@@ -1,7 +1,7 @@
 // Toggles
 //
 // Used in conjunction with global variables to enable certain theme features.
-
+// $shodow...是表示变量的数量不定
 @mixin box-shadow($shadow...) {
   @if $enable-shadows {
     box-shadow: $shadow;
