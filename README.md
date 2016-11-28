@@ -6,6 +6,11 @@
 bootstrap/
 ├── dist/
 │   ├── css/ --编译整合后的scss文件，可用于产品开发
+│   │   │
+│	│   │── bootstrap.css  -- 完整的bootstrap样式文件
+│	│	│── bootstrap-flex.css -- 使能了flex-box特性的完整bootstrap样式文件
+│	│	│── bootstrap-grid.css -- 仅包含grid布局相关的样式文件
+│	│	└── bootstrap-reboot.css -- 仅包含样式重置的相关样式文件
 │   └── js/  --编译整合后的js文件，可用于产品开发
 ├── js/
 │   ├── dist/  --针对src对应的es6语法的js文件转换为对应的es5文件
@@ -57,3 +62,4 @@ jQuery.extend = jQuery.fn.extend = function() {}
 ## * carsouel轮播组件demo
 
 ## * scrollspy滚动监听组件demo
+
