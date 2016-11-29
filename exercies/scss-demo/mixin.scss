@@ -1,0 +1,29 @@
+// variables for background-color
+$bg-red: #660000;
+$bg-green: #006600;
+$bg-blue: #000066;
+
+// mixin: select elements only has number n.
+@mixin n-items($n) {
+    &:first-child:nth-last-child(#{$n}),
+    &:first-child:nth-last-child(#{$n}) ~ & {
+	@content;
+    }
+}
+
+li {
+    // match <li>s with 4 items
+    @include n-items(4) {
+	background-color: $bg-green;
+    }
+    
+    // match <li>s with 5 items
+    @include n-items(5) {
+	background-color: $bg-red;
+    }
+
+    // match <li>s with 6 items
+    @include n-items(6) {
+	background-color: $bg-blue;
+    }
+}

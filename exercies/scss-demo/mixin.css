@@ -1,0 +1,8 @@
+li:first-child:nth-last-child(4), li:first-child:nth-last-child(4) ~ li {
+  background-color: #006600; }
+li:first-child:nth-last-child(5), li:first-child:nth-last-child(5) ~ li {
+  background-color: #660000; }
+li:first-child:nth-last-child(6), li:first-child:nth-last-child(6) ~ li {
+  background-color: #000066; }
+
+/*# sourceMappingURL=mixin.css.map */
