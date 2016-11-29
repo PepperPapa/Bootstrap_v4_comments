@@ -195,7 +195,9 @@ const Alert = (($) => {
 
         if (!data) {
           data = new Alert(this)
-          // 相当于设置该dom元素的data-bs.alert属性为data
+          /* 相当于设置该dom元素的data-bs.alert属性为data
+           * 将Alert对象写入DOM元素的data属性是避免每次都要创建对象，首先读取对象，不存在再新建对象
+           */
           $element.data(DATA_KEY, data)
         }
 
