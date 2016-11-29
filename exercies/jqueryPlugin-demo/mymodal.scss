@@ -1,0 +1,34 @@
+
+h3 {
+    margin-top: .5em;
+    margin-bottom: .5em;
+}
+
+.mymodal {
+    display: none;
+    position: absolute;
+    width: 20em;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 1em;
+    border-radius: .5em;
+    box-shadow: 0 0 0 50vmax rgba(0,0,0,.6);
+    font-family: Arial, sans-serif;
+
+    .close {
+	position: absolute;
+	content: "x";
+	top: 15px;
+	right: 15px;
+	cursor: pointer;
+	&:hover {
+	    color: lighten(#000, 35%);
+	}
+    }
+}
+.mymodal.fade {
+    transition-duration: 30s;
+    transition-timing-function: ease;
+    transition-property: display;
+}
