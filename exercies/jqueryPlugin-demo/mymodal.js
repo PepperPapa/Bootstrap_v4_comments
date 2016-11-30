@@ -22,8 +22,14 @@ $(function($) {
     var self = this;
     if ($mymodal.hasClass(NAME)) {
       if (!$mymodal.hasClass(SHOW)) {
-        $mymodal.css("display", "block")
-                .addClass(SHOW);
+        $mymodal.show();
+        /* 如果直接添加类show（opacity会变为1），不会出现预期的过渡效果（opacity加入了过渡属性)
+         * display会破坏过渡效果,这里通过setTimeout来规避此情况，delay为0即可
+         */
+        setTimeout(function(){
+            $mymodal.addClass(SHOW);
+          }, 0);
+            
 
         var $close = this.close;
         $close.on("click", function(event) {
@@ -35,8 +41,13 @@ $(function($) {
 
   Mymodal.prototype.handleDismiss = function() {
     var $mymodal = this.element;
-    $mymodal.css("display", "none")
-            .removeClass(SHOW);
+    $mymodal.removeClass(SHOW);
+    /* 如果直接remove类show（opacity会变为1），不会出现预期的过渡效果（opacity加入了过渡属性)
+     * display会破坏过渡效果,这里通过setTimeout来规避此情况，delay不能为0
+     */
+    setTimeout(function(){
+      $mymodal.hide();
+    }, 150);
   }
 
   Mymodal._jQueryInterface = function(config) {

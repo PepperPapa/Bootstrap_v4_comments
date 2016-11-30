@@ -15,16 +15,17 @@ h3 {
   font-family: Arial, sans-serif; }
   .mymodal .close {
     position: absolute;
-    content: "x";
+    content: "";
     top: 15px;
     right: 15px;
     cursor: pointer; }
     .mymodal .close:hover {
       color: #595959; }
 
-.mymodal.fade {
-  transition-duration: 30s;
-  transition-timing-function: ease;
-  transition-property: display; }
+.fade {
+  opacity: 0;
+  transition: opacity .15s linear; }
+  .fade.show {
+    opacity: 1; }
 
 /*# sourceMappingURL=mymodal.css.map */

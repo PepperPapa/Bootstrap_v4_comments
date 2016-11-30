@@ -18,7 +18,7 @@ h3 {
 
     .close {
 	position: absolute;
-	content: "x";
+	content: "";
 	top: 15px;
 	right: 15px;
 	cursor: pointer;
@@ -27,8 +27,11 @@ h3 {
 	}
     }
 }
-.mymodal.fade {
-    transition-duration: 30s;
-    transition-timing-function: ease;
-    transition-property: display;
+.fade {
+    opacity: 0;
+    transition: opacity .15s linear;
+
+    &.show {
+	opacity: 1;
+    }
 }
