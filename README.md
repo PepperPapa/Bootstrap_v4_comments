@@ -71,3 +71,5 @@ jQuery.extend = jQuery.fn.extend = function() {}
 5. mixin: @maxin命令创建mixin，使用@include调用定义的mixin。
 6. 扩展和继承：使用@extend命令继承共享的样式。
 7. 操作符：使用+ - * / %等运算法进行基本的数学运算
+
+## * 我的模态对话框jQuery插件及示例(./exercise/jQueryPlugin-demo)
