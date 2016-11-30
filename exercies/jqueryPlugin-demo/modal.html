@@ -8,17 +8,43 @@
       .container {
       text-align: center;
       }
+      .btn {
+      margin: 1rem;
+      padding: .3rem .8em;
+      border-radius: .2rem;
+      border: 1px solid rgba(0,0,0,.1);
+      background: #58a linear-gradient(hsla(0,0%,100%,.2), transparent);
+      box-shadow: 0 .05em .25em rgba(0,0,0,.5);
+      color: white;
+      font-size: 125%;
+      line-height: 1.5;
+      outline: none;
+      }
+      .btn-default {
+      border-color: #58a;
+      }
+      .btn:hover {
+      background: #58a linear-gradient(hsla(0,0%,100%,.4), hsla(0,0%,100%,.2));
+      }
     </style>
   </head>
   <body>
     <div class="container">
-      <button data-toggle="mymodal" data-target="#mymodal">open modal</button>
+      <button class="btn btn-default" data-toggle="mymodal" data-target="#mymodal">open modal</button>
+      <button class="btn btn-default" data-toggle="mymodal" data-target="#mymodal2">open another modal</button>
     </div>
     <div id="mymodal" class="mymodal fade">
       <h3 class="title">modal title
 	<span class="close">&times;</span>
       </h3>
       <div class="content">modal content...</div>
+    </div>
+
+    <div id="mymodal2" class="mymodal fade">
+      <h3 class="title">another modal title
+	<span class="close">&times;</span>
+      </h3>
+      <div class="content">another modal content...</div>
     </div>
     <script src="../../jquery-3.1.1.js"></script>
     <script src="./mymodal.js"></script>
